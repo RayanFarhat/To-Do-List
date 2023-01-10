@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "518509659750",
+    "project_id": "ryantodolist-edf06",
+    "storage_bucket": "ryantodolist-edf06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518509659750:android:97e9bea9e9b2201a3d0fa7",
+        "android_client_info": {
+          "package_name": "com.example.ryantodolist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518509659750-upb0k6e78aucr95de5i2o3p1slrpu3ht.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgTS2t53UqcGQ2FE5yaOzl_C7qF5dbjxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518509659750-upb0k6e78aucr95de5i2o3p1slrpu3ht.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
