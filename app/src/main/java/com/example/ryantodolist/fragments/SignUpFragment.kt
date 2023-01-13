@@ -5,56 +5,70 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.example.ryantodolist.R
+import com.example.ryantodolist.databinding.FragmentSignUpBinding
+import com.google.firebase.auth.FirebaseAuth
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [SignUpFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SignUpFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var auth:FirebaseAuth
+    private lateinit var navContol : NavController
+    private lateinit var binding :FragmentSignUpBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sign_up, container, false)
+        binding = FragmentSignUpBinding.inflate(inflater,container,false)
+        // start only in the SignUpFragment
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignUpFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignUpFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        init(view)
+        registerEvents()
+    }
+
+    private fun init(view: View){
+        navContol = Navigation.findNavController(view)
+        auth = FirebaseAuth.getInstance()
+    }
+
+    private fun registerEvents(){
+
+        // if the user want to signin then go to the sign in fragment
+        binding.textViewSignIn.setOnClickListener {
+            navContol.navigate(R.id.action_signUpFragment_to_signInFragment)
+        }
+
+        // when the user press the registration btn
+        binding.nextBtn.setOnClickListener {
+            val email = binding.emailEt.text.toString().trim()
+            val pass = binding.passEt.text.toString().trim()
+            val verifyPass = binding.verifyPassEt.text.toString().trim()
+
+            // check if the inputs are not empty and pass is right
+            if(email.isNotEmpty() && pass.isNotEmpty() && verifyPass.isNotEmpty()){
+                if(pass == verifyPass){
+                    // create the email in firebase
+                    auth.createUserWithEmailAndPassword(email,pass).addOnCompleteListener {
+                        // check if the email is created or not
+                        if (it.isSuccessful) {
+                            Toast.makeText(context,"Registered Successfully",Toast.LENGTH_SHORT).show()
+                            // send user to home page
+                            navContol.navigate(R.id.action_signUpFragment_to_homeFragment)
+                        } else {
+                            Toast.makeText(context,it.exception?.message,Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
+        }
     }
 }
