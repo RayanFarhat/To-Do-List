@@ -1,15 +1,13 @@
 package com.example.ryantodolist.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.example.ryantodolist.R
-import com.example.ryantodolist.databinding.FragmentHomeBinding
 import com.example.ryantodolist.databinding.FragmentToDoDialogBinding
+import com.example.ryantodolist.utils.ToDoData
 import com.google.android.material.textfield.TextInputEditText
 
 // change to DialogFragment to get the show method
@@ -17,6 +15,7 @@ class ToDoDialogFragment : DialogFragment() {
 
     private lateinit var binding : FragmentToDoDialogBinding
     private var listener : OnDialogNextBtnClickListener? = null
+    private var toDoData: ToDoData? = null
 
     // to init the reference
     fun setListener(listener: OnDialogNextBtnClickListener) {
@@ -33,6 +32,14 @@ class ToDoDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (arguments != null){
+
+            toDoData = ToDoData(
+                arguments?.getString("taskId").toString() ,
+                arguments?.getString("task").toString())
+            binding.todoEt.setText(toDoData?.task)
+        }
+
         registerEvents()
     }
     private fun registerEvents(){
@@ -41,10 +48,18 @@ class ToDoDialogFragment : DialogFragment() {
             // get the new task
             val todoTask = binding.todoEt.text.toString()
             if (todoTask.isNotEmpty()){
-                listener?.saveTask(todoTask , binding.todoEt)
+                if (toDoData == null){
+                    listener?.saveTask(todoTask , binding.todoEt)
+                }else{
+                    toDoData!!.task = todoTask
+                    listener?.updateTask(toDoData!!, binding.todoEt)
+                }
+
             }else{
                 Toast.makeText(context,"Please type something",Toast.LENGTH_SHORT).show()
             }
+
+
         }
 
         // when we exit the task editor
@@ -58,5 +73,18 @@ class ToDoDialogFragment : DialogFragment() {
     // we just add reference to function of home fragment
     interface OnDialogNextBtnClickListener{
         fun saveTask(todoTask:String , todoEdit:TextInputEditText)
+        fun updateTask(toDoData: ToDoData, todoEdit:TextInputEditText)
+    }
+
+    companion object {
+        const val TAG = "DialogFragment"
+        @JvmStatic
+        fun newInstance(taskId: String, task: String) =
+            ToDoDialogFragment().apply {
+                arguments = Bundle().apply {
+                    putString("taskId", taskId)
+                    putString("task", task)
+                }
+            }
     }
 }
