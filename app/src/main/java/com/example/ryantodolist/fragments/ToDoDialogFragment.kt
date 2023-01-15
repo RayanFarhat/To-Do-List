@@ -41,7 +41,9 @@ class ToDoDialogFragment : DialogFragment() {
             toDoData = ToDoData(
                 arguments?.getString("taskId").toString() ,
                 arguments?.getString("task").toString())
-            binding.todoEt.setText(toDoData?.task)
+            // turn the string to data class
+            val todo = Gson().fromJson(toDoData?.task, ToDoDataJson::class.java)
+            binding.todoEt.setText(todo.desc)
         }
 
         registerEvents()
@@ -52,8 +54,15 @@ class ToDoDialogFragment : DialogFragment() {
             // get the new task
             val todoTask = binding.todoEt.text.toString()
             val todoDate = SimpleDateFormat("yyyy-MM-dd").format(Date())
+            var todoIsDone :String
+            if(binding.todoIsDoneEdit.text == "Undone") {
+                todoIsDone = "0"
+            }
+            else {
+                todoIsDone = "1"
+            }
             // stringify the new task as tododatajson
-            val jsonString = Gson().toJson(ToDoDataJson(todoTask,todoDate))  // json string
+            val jsonString = Gson().toJson(ToDoDataJson(todoTask,todoDate,todoIsDone))
 
             if (todoTask.isNotEmpty()){
                 if (toDoData == null){
@@ -68,6 +77,16 @@ class ToDoDialogFragment : DialogFragment() {
             }
 
 
+        }
+
+        // when we edit change the text
+        binding.todoIsDoneEdit.setOnClickListener {
+            if(binding.todoIsDoneEdit.text == "Undone") {
+                binding.todoIsDoneEdit.text = "Done"
+            }
+            else {
+                binding.todoIsDoneEdit.text = "Undone"
+            }
         }
 
         // when we exit the task editor

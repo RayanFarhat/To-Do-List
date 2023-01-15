@@ -1,10 +1,16 @@
 package com.example.ryantodolist.utils
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ryantodolist.R
 import com.example.ryantodolist.databinding.EachTodoItemBinding
+import com.google.android.material.textfield.TextInputEditText
 import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.*
 
 // get he list of tododata objects
 class ToDoAdapter(private val list:MutableList<ToDoData>)
@@ -30,8 +36,18 @@ class ToDoAdapter(private val list:MutableList<ToDoData>)
                 // turn the string to data class
                 val todo = Gson().fromJson(this.task, ToDoDataJson::class.java)
                 // update the card
-                binding.todoTask.text = todo.desc
+                if(todo.desc.length > 22)
+
+                    binding.todoTask.text = todo.desc.substring(0, 22) + "..."
+                else
+                    binding.todoTask.text = todo.desc
                 binding.todoDate.text = todo.date
+                if(todo.isDone == "1") {
+                    binding.todoIsDone.text = "Done"
+                }
+                else {
+                    binding.todoIsDone.text = "Undone"
+                }
 
                 binding.editTask.setOnClickListener {
                     listener?.onEditItemClicked(this , position)

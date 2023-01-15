@@ -54,6 +54,19 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <Button
+            android:id="@+id/todoIsDoneEdit"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="164dp"
+            android:width="60dp"
+            android:height="40dp"
+            android:backgroundTint="@color/blue"
+            android:text="Undone"
+            app:layout_constraintEnd_toStartOf="@+id/todoNextBtn"
+            app:layout_constraintTop_toBottomOf="@+id/cardView1" />
+
         <ImageView
             android:id="@+id/todoNextBtn"
             android:layout_width="50dp"
