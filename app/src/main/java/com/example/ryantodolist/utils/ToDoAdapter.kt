@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ryantodolist.databinding.EachTodoItemBinding
+import com.google.gson.Gson
 
 // get he list of tododata objects
 class ToDoAdapter(private val list:MutableList<ToDoData>)
@@ -26,7 +27,11 @@ class ToDoAdapter(private val list:MutableList<ToDoData>)
     override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
         with(holder) {
             with(list[position]) {
-                binding.todoTask.text = this.task
+                // turn the string to data class
+                val todo = Gson().fromJson(this.task, ToDoDataJson::class.java)
+                // update the card
+                binding.todoTask.text = todo.desc
+                binding.todoDate.text = todo.date
 
                 binding.editTask.setOnClickListener {
                     listener?.onEditItemClicked(this , position)

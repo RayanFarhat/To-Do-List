@@ -8,7 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.ryantodolist.databinding.FragmentToDoDialogBinding
 import com.example.ryantodolist.utils.ToDoData
+import com.example.ryantodolist.utils.ToDoDataJson
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.*
 
 // change to DialogFragment to get the show method
 class ToDoDialogFragment : DialogFragment() {
@@ -47,11 +51,15 @@ class ToDoDialogFragment : DialogFragment() {
         binding.todoNextBtn.setOnClickListener {
             // get the new task
             val todoTask = binding.todoEt.text.toString()
+            val todoDate = SimpleDateFormat("yyyy-MM-dd").format(Date())
+            // stringify the new task as tododatajson
+            val jsonString = Gson().toJson(ToDoDataJson(todoTask,todoDate))  // json string
+
             if (todoTask.isNotEmpty()){
                 if (toDoData == null){
-                    listener?.saveTask(todoTask , binding.todoEt)
+                    listener?.saveTask(jsonString , binding.todoEt)
                 }else{
-                    toDoData!!.task = todoTask
+                    toDoData!!.task = jsonString
                     listener?.updateTask(toDoData!!, binding.todoEt)
                 }
 
