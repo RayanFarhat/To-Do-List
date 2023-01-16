@@ -30,6 +30,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <RadioGroup
+        android:id="@+id/filter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -42,7 +43,8 @@
             android:id="@+id/all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="all" />
+            android:text="all"
+            android:checked="true"/>
 
         <RadioButton
             android:id="@+id/done"

@@ -1,10 +1,12 @@
 package com.example.ryantodolist.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -16,9 +18,11 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.example.ryantodolist.utils.ToDoAdapter
 import  com.example.ryantodolist.utils.ToDoData
+import com.example.ryantodolist.utils.ToDoDataJson
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
 
 class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener,
     ToDoAdapter.TaskAdapterInterface {
@@ -33,6 +37,10 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
     // for handling array of tasks
     private lateinit var taskAdapter: ToDoAdapter
     private lateinit var toDoItemList: MutableList<ToDoData>
+
+    // to handle the filter
+    private var filter: Int = 0
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,21 +77,37 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
         taskAdapter.setListener(this)
         // now make the mainRecyclerView handle the toDoAdapter class
         binding.mainRecyclerView.adapter = taskAdapter
-
     }
+
     private fun registerEvents(){
+        // when press add task
         binding.addTaskBtn.setOnClickListener {
             frag = ToDoDialogFragment()
             frag!!.setListener(this)
             frag!!.show(childFragmentManager, "ToDoDialogFragment")
 
         }
+
+        // handle filtering
+        binding.filter.setOnCheckedChangeListener { _, checkedId ->
+             if(checkedId == binding.all.id){
+                 this.filter = 0
+             }else if (checkedId == binding.done.id){
+                 this.filter = 1
+             }else{
+                 this.filter = 2
+
+             }
+            getTaskFromFirebase()
+        }
     }
 
     private fun getTaskFromFirebase() {
         // update the list when the database has changed
         database.addValueEventListener(object : ValueEventListener {
+
             override fun onDataChange(snapshot: DataSnapshot) {
+                Log.i("aaaaaaaaaaaaaa","a")
                 // clear all the old tasks
                 toDoItemList.clear()
                 // add again all the tasks to the list
@@ -91,8 +115,21 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
                     val todoTask =
                         taskSnapshot.key?.let { ToDoData(it, taskSnapshot.value.toString()) }
 
+                    // turn the string of data to data class
+                    val todoData = Gson().fromJson(taskSnapshot.value.toString(), ToDoDataJson::class.java)
+
                     if (todoTask != null) {
+                        // if done filter is checked
+                        if(filter == 1){
+                            if(todoData.isDone == "1")
+                                toDoItemList.add(todoTask)
+                        // if undone filter is checked
+                        }else if(filter == 2){
+                            if(todoData.isDone == "0")
+                                toDoItemList.add(todoTask)
+                        }else{
                         toDoItemList.add(todoTask)
+                        }
                     }
                 }
                 taskAdapter.notifyDataSetChanged()
@@ -134,7 +171,7 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
         }
     }
 
-    override fun onDeleteItemClicked(toDoData: ToDoData, position: Int) {
+    override fun onDelete(toDoData: ToDoData, position: Int) {
         database.child(toDoData.taskId).removeValue().addOnCompleteListener {
             if (it.isSuccessful) {
                 Toast.makeText(context, "Deleted Successfully", Toast.LENGTH_SHORT).show()
@@ -144,7 +181,7 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
         }
     }
 
-    override fun onEditItemClicked(toDoData: ToDoData, position: Int) {
+    override fun onEdit(toDoData: ToDoData, position: Int) {
         if (frag != null)
             childFragmentManager.beginTransaction().remove(frag!!).commit()
 
@@ -155,5 +192,4 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
             ToDoDialogFragment.TAG
         )
     }
-
 }
