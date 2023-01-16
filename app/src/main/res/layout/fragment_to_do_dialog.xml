@@ -58,8 +58,8 @@
             android:id="@+id/todoIsDoneEdit"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="164dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="136dp"
             android:width="60dp"
             android:height="40dp"
             android:backgroundTint="@color/blue"
@@ -67,16 +67,17 @@
             app:layout_constraintEnd_toStartOf="@+id/todoNextBtn"
             app:layout_constraintTop_toBottomOf="@+id/cardView1" />
 
-        <ImageView
+        <Button
             android:id="@+id/todoNextBtn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/btn"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="80dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            app:layout_constraintTop_toBottomOf="@+id/cardView1"
+            android:text="Save"
+            app:backgroundTint="@color/text_color"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/cardView1"
-            android:layout_marginTop="12dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/cardView1" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

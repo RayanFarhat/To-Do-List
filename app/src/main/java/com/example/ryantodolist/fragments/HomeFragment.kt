@@ -81,6 +81,7 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
     }
 
     private fun getTaskFromFirebase() {
+        // update the list when the database has changed
         database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 // clear all the old tasks
