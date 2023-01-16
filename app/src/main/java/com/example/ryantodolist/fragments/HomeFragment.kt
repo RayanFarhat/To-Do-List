@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.ryantodolist.R
 import com.example.ryantodolist.databinding.FragmentHomeBinding
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -100,6 +101,12 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
              }
             getTaskFromFirebase()
         }
+
+        // handle signout
+        binding.signout.setOnClickListener {
+            auth.signOut();
+            navContol.navigate(R.id.action_homeFragment_to_signInFragment)
+        }
     }
 
     private fun getTaskFromFirebase() {
@@ -107,11 +114,10 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
         database.addValueEventListener(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                Log.i("aaaaaaaaaaaaaa","a")
                 // clear all the old tasks
                 toDoItemList.clear()
                 // add again all the tasks to the list
-                for (taskSnapshot in snapshot.children) {
+                for (taskSnapshot in snapshot.children.reversed()) {
                     val todoTask =
                         taskSnapshot.key?.let { ToDoData(it, taskSnapshot.value.toString()) }
 
@@ -138,8 +144,6 @@ class HomeFragment : Fragment(), ToDoDialogFragment.OnDialogNextBtnClickListener
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show()
             }
-
-
         })
     }
 

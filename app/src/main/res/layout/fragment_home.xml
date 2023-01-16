@@ -19,12 +19,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="399dp"
+        android:layout_height="456dp"
         android:layout_marginTop="42dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addTaskBtn"
         app:layout_constraintVertical_bias="0.0" />
@@ -58,6 +57,22 @@
             android:layout_height="wrap_content"
             android:text="undone" />
     </RadioGroup>
+
+    <Button
+        android:id="@+id/signout"
+        android:layout_width="141dp"
+        android:layout_height="53dp"
+        android:text="SignOut"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:backgroundTint="@color/red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.081"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainRecyclerView"
+        app:layout_constraintVertical_bias="0.161"
+        android:visibility="visible"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
