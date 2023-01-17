@@ -19,8 +19,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mainRecyclerView"
-        android:layout_width="399dp"
-        android:layout_height="456dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="42dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,14 +65,14 @@
         android:text="SignOut"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:visibility="visible"
         app:backgroundTint="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.081"
+        app:layout_constraintHorizontal_bias="0.059"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainRecyclerView"
-        app:layout_constraintVertical_bias="0.161"
-        android:visibility="visible"/>
+        app:layout_constraintTop_toBottomOf="@+id/filter"
+        app:layout_constraintVertical_bias="0.973" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
